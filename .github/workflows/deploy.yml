@@ -10,31 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4 # Atualiza para a versão mais recente
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Deploy to cPanel
-        env:
-          CPANEL_USER: ${{ secrets.CPANEL_USER }} # Armazena usuário em segredo
-          CPANEL_TOKEN: ${{ secrets.CPANEL_TOKEN }} # Armazena token em segredo
-          CPANEL_HOST: "vmi1477516.contaboserver.net" # Host do cPanel
-          CPANEL_PORT: "2083" # Porta padrão do cPanel
-          REPOSITORY_ROOT: "/home/megalochat/public_html/restart" # Caminho do repositório
-        run: |
-          echo "Iniciando deploy para cPanel..."
+    - name: Deploy to cPanel
+      run: |
+        curl -X POST \
+          -H "Authorization: cpanel megalochat:NJ6Y92K4YE519BV296T16QGHXCIJMGY1" \
+          -H "Content-Type: multipart/form-data" \
+          -F "repository_root=/home/megalochat/public_html/restart" \
+          -F "branch=main" \
+          https://vmi1477516.contaboserver.net:2083/execute/VersionControl/update
 
-          response=$(curl -s -w "%{http_code}" -o response.txt -X POST \
-            -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_TOKEN}" \
-            -H "Content-Type: application/x-www-form-urlencoded" \
-            --data "repository_root=${REPOSITORY_ROOT}&branch=main" \
-            "https://${CPANEL_HOST}:${CPANEL_PORT}/execute/VersionControl/update")
-
-          echo "Resposta do servidor:"
-          cat response.txt
-
-          if [ "$response" -ne 200 ]; then
-            echo "❌ Falha ao fazer deploy. Código HTTP: $response"
-            exit 1
-          else
-            echo "✅ Deploy realizado com sucesso!"
-          fi
+        curl -X POST http://seu-servidor.com/kill_process.php \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer 7fH2xd9QEBo1pzNVRaK8yJXwuMZqTGfiYr5nO6LSbcCmWgDtxvUPeMKAjRh3vFZlNTX0YiGsHd"
