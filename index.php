@@ -155,6 +155,9 @@ $server->on("message", function (Server $server, Frame $frame) {
 		if ($data->action == "AddMemberToGroup") {
 			$response = FASTcUrlPOST($frame->data);
 			$server->push($frame->fd, $response); // => Envia a mensagem para os usuarios
+		} elseif ($data->action == "saveFlags") {
+			$response = FASTcUrlPOST($frame->data);
+			$server->push($frame->fd, $response); // => Envia a mensagem para os usuarios
 		}
 	} elseif ($data->evento == "contact") {
 		$url = 'https://www.megalochat.com/sandbox/apis/consumida/privada/contact_api.php';
