@@ -10,52 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4 # Atualiza para a versão mais recente
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Deploy to cPanel
-        env:
-          CPANEL_USER: ${{ secrets.CPANEL_USER }} # Usuário do cPanel (segredo)
-          CPANEL_TOKEN: ${{ secrets.CPANEL_TOKEN }} # Token do cPanel (segredo)
-          WEBSOCKET_TOKEN: ${{ secrets.WEBSOCKET_TOKEN }} # Token do script PHP (segredo)
-          CPANEL_HOST: "vmi1477516.contaboserver.net"
-          CPANEL_PORT: "2083"
-          REPOSITORY_ROOT: "/home/megalochat/public_html/restart"
-          KILL_PROCESS_URL: "http://seu-servidor.com/kill_process.php" # Substitua pelo URL real
-        run: |
-          echo "Iniciando deploy para cPanel..."
+    - name: Deploy to cPanel
+      env:
+        CPANEL_USER: ${{ secrets.CPANEL_USER }} # Usuário do cPanel
+        CPANEL_TOKEN: ${{ secrets.CPANEL_TOKEN }} # Token do cPanel
+        WEBSOCKET_TOKEN: ${{ secrets.WEBSOCKET_TOKEN }} # Token do script PHP
+        CPANEL_HOST: "vmi1477516.contaboserver.net"
+        CPANEL_PORT: "2083"
+        REPOSITORY_ROOT: "/home/megalochat/public_html/restart/"
+        KILL_PROCESS_URL: "http://seu-servidor.com/kill_process.php" # Substitua pelo URL real
+      run: |
+        curl -X POST \
+          -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_TOKEN}" \
+          -H "Content-Type: multipart/form-data" \
+          -F "repository_root=${REPOSITORY_ROOT}" \
+          -F "branch=main" \
+          https://${CPANEL_HOST}:${CPANEL_PORT}/execute/VersionControl/update
 
-          # Checkpoint 1: Deploy para cPanel
-          response_cpanel=$(curl -s -w "%{http_code}" -o cpanel_response.txt -X POST \
-            -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_TOKEN}" \
-            -H "Content-Type: multipart/form-data" \
-            -F "repository_root=/home/megalochat/public_html/restart/" \
-            -F "branch=main" \
-            https://vmi1477516.contaboserver.net:2083/execute/VersionControl/update")
-
-
-          echo "Checkpoint 1: Resposta do cPanel (HTTP $response_cpanel):"
-          cat cpanel_response.txt
-
-          if [ "$response_cpanel" -ne 200 ]; then
-            echo "❌ Falha no deploy para cPanel. Código HTTP: $response_cpanel"
-            exit 1
-          else
-            echo "✅ Deploy para cPanel concluído com sucesso!"
-          fi
-
-          # Checkpoint 2: Chamar script para reiniciar processo
-          response_websocket=$(curl -s -w "%{http_code}" -o websocket_response.txt -X POST \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${WEBSOCKET_TOKEN}" \
-            "${KILL_PROCESS_URL}")
-
-          echo "Checkpoint 2: Resposta do script kill_process.php (HTTP $response_websocket):"
-          cat websocket_response.txt
-
-          if [ "$response_websocket" -ne 200 ]; then
-            echo "❌ Falha ao reiniciar o processo WebSocket. Código HTTP: $response_websocket"
-            exit 1
-          else
-            echo "✅ Processo WebSocket reiniciado com sucesso!"
-          fi
+        curl -X POST ${KILL_PROCESS_URL} \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer ${WEBSOCKET_TOKEN}"
