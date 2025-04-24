@@ -1,0 +1,38 @@
+name: Deploy to cPanel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Deploy to cPanel via cURL
+      env:
+        CPANEL_AUTH_HEADER: ${{ secrets.CPANEL_AUTH_HEADER }}
+        CPANEL_DEPLOY_URL: ${{ secrets.CPANEL_DEPLOY_URL }}
+      run: |
+        echo "Iniciando deploy para cPanel..."
+
+        response=$(curl -s -w "%{http_code}" -o response.txt -X POST \
+          -H "Authorization: $CPANEL_AUTH_HEADER" \
+          -H "Content-Type: multipart/form-data" \
+          -F "repository_root=/home/megalochat/public_html/restart" \
+          -F "branch=main" \
+          "$CPANEL_DEPLOY_URL")
+
+        echo "Resposta do servidor:"
+        cat response.txt
+
+        if [ "$response" -ne 200 ]; then
+          echo "❌ Falha ao fazer deploy. Código HTTP: $response"
+          exit 1
+        else
+          echo "✅ Deploy realizado com sucesso!"
+        fi
