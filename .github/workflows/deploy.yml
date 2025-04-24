@@ -15,8 +15,8 @@ jobs:
 
     - name: Deploy to cPanel via cURL
       env:
-        CPANEL_AUTH_HEADER: ${{ secrets.CPANEL_AUTH_HEADER }}
-        CPANEL_DEPLOY_URL: ${{ secrets.CPANEL_DEPLOY_URL }}
+        CPANEL_AUTH_HEADER: https://vmi1477516.contaboserver.net:2083/execute/VersionControl/update
+        CPANEL_DEPLOY_URL: 	cpanel megalochat:NJ6Y92K4YE519BV296T16QGHXCIJMGY1
       run: |
         echo "Iniciando deploy para cPanel..."
 
