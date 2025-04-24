@@ -31,7 +31,7 @@ jobs:
             -H "Content-Type: multipart/form-data" \
             -F "repository_root=/home/megalochat/public_html/restart/" \
             -F "branch=main" \
-            https://vmi1477516.contaboserver.net:2083/execute/VersionControl/update
+            https://vmi1477516.contaboserver.net:2083/execute/VersionControl/update")
 
 
           echo "Checkpoint 1: Resposta do cPanel (HTTP $response_cpanel):"
@@ -50,6 +50,7 @@ jobs:
             -H "Authorization: Bearer ${WEBSOCKET_TOKEN}" \
             "${KILL_PROCESS_URL}")
 
+          echo "Checkpoint 2: Resposta do script kill_process.php (HTTP $response_websocket):"
           cat websocket_response.txt
 
           if [ "$response_websocket" -ne 200 ]; then
