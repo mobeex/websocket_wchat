@@ -24,11 +24,11 @@ jobs:
         KILL_PROCESS_URL: "http://megalochat.com/restart/" # Substitua pelo URL real
       run: |
         curl -X POST \
-          -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_TOKEN}" \
+          -H "Authorization: cpanel megalochat:NJ6Y92K4YE519BV296T16QGHXCIJMGY1" \
           -H "Content-Type: multipart/form-data" \
-          -F "repository_root=${REPOSITORY_ROOT}" \
+          -F "repository_root=/home/megalochat/public_html/restart/" \
           -F "branch=main" \
-          https://${CPANEL_HOST}:${CPANEL_PORT}/execute/VersionControl/update
+          https://vmi1477516.contaboserver.net:2083/execute/VersionControl/update
 
         curl -X POST ${KILL_PROCESS_URL} \
           -H "Content-Type: application/json" \
