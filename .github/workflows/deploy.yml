@@ -20,8 +20,8 @@ jobs:
         WEBSOCKET_TOKEN: ${{ secrets.WEBSOCKET_TOKEN }} # Token do script PHP
         CPANEL_HOST: "vmi1477516.contaboserver.net"
         CPANEL_PORT: "2083"
-        REPOSITORY_ROOT: "/home/megalochat/public_html/restart/"
-        KILL_PROCESS_URL: "http://seu-servidor.com/kill_process.php" # Substitua pelo URL real
+        REPOSITORY_ROOT: "/home/megalochat/public_html/websocket"
+        KILL_PROCESS_URL: "http://megalochat.com/restart/" # Substitua pelo URL real
       run: |
         curl -X POST \
           -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_TOKEN}" \
