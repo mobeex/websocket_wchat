@@ -12,7 +12,7 @@ $server->set([
 	'ssl_cert_file' => '/etc/letsencrypt/live/megalochat.com/fullchain.pem',
 	'ssl_key_file' => '/etc/letsencrypt/live/megalochat.com/privkey.pem',
 	'daemonize' => false,
-	'log_file' => __DIR__ . '/swoole.log', 
+	'log_file' => __DIR__ . '/swoole.log',
 ]);
 echo "[" . date('Y-m-d H:i:s') . "] Servidor WebSocket iniciado na porta 9502 com SSL (WSS)\n";
 
@@ -153,9 +153,6 @@ $server->on("message", function (Server $server, Frame $frame) {
 			$server->push($frame->fd, $response); // => Envia a mensagem para os usuarios
 		}
 		if ($data->action == "AddMemberToGroup") {
-			$response = FASTcUrlPOST($frame->data);
-			$server->push($frame->fd, $response); // => Envia a mensagem para os usuarios
-		} elseif ($data->action == "saveFlags") {
 			$response = FASTcUrlPOST($frame->data);
 			$server->push($frame->fd, $response); // => Envia a mensagem para os usuarios
 		}
@@ -299,7 +296,7 @@ function urlPublicAPI($data)
 		}
 	}
 	$url = 'https://www.megalochat.com/sandbox/apis/consumida/publica/index.php?' .
-		'api=' . $data->action . '&' . 
+		'api=' . $data->action . '&' .
 		'elemento=' . $elemento .  '&' .
 		'provedorID=' . $provedorID .  '&' .
 		'chatID=' . $chatID .  '&' .
@@ -318,7 +315,7 @@ function urlPublicAPI($data)
 	'userAgent=' . urlencode($data->userAgent) */;
 	return $url;
 }
- 
+
 
 function cUrlGET($url)
 {
