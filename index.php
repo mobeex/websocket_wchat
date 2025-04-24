@@ -12,7 +12,7 @@ $server->set([
 	'ssl_cert_file' => '/etc/letsencrypt/live/megalochat.com/fullchain.pem',
 	'ssl_key_file' => '/etc/letsencrypt/live/megalochat.com/privkey.pem',
 	'daemonize' => false,
-	'log_file' => __DIR__ . '/swoole.log',
+	'log_file' => __DIR__ . '/swoole.log', 
 ]);
 echo "[" . date('Y-m-d H:i:s') . "] Servidor WebSocket iniciado na porta 9502 com SSL (WSS)\n";
 
