@@ -299,7 +299,7 @@ function urlPublicAPI($data)
 		}
 	}
 	$url = 'https://www.megalochat.com/sandbox/apis/consumida/publica/index.php?' .
-		'api=' . $data->action . '&' .
+		'api=' . $data->action . '&' . 
 		'elemento=' . $elemento .  '&' .
 		'provedorID=' . $provedorID .  '&' .
 		'chatID=' . $chatID .  '&' .
