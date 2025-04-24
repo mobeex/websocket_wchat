@@ -32,4 +32,4 @@ jobs:
 
         curl -X POST ${KILL_PROCESS_URL} \
           -H "Content-Type: application/json" \
-          -H "Authorization: Bearer ${WEBSOCKET_TOKEN}"
+          -H "Authorization: Bearer 7fH2xd9QEBo1pzNVRaK8yJXwuMZqTGfiYr5nO6LSbcCmWgDtxvUPeMKAjRh3vFZlNTX0YiGsHd"
