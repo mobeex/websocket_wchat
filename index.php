@@ -43,7 +43,7 @@ $server->on("message", function (Server $server, Frame $frame) {
 			$url = 'https://www.megalochat.com/sandbox/apis/consumida/publica/index.php?evento=wsConversa&action=' . $data->action . '&wabaID=' . $data->wabaID . '&phoneNumberID=' . $data->phoneNumberID . '&usuario=' . $data->usuario . '&userID=' . $data->userID . '&maxIDB=' . $data->maxIDB;
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_TIMEOUT, 0);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
