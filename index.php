@@ -23,7 +23,11 @@ $server->on("open", function (Server $server, Request $request) {
 $server->on("message", function (Server $server, Frame $frame) {
 
 	echo "[" . date('Y-m-d H:i:s') . "] Mensagem recebida deeeeee {$frame->fd}: {$frame->data}\n";
-	$data = json_decode($frame->data);
+	$data = json_decode(json: $frame->data);
+	//salva em um arquivo de log
+	$log = fopen("log.txt", "a+");
+	fwrite($log, "[" . date('Y-m-d H:i:s') . "] Mensagem recebida de {$frame->fd}: {$frame->data}\n");
+	fclose($log);
 
 	if ($data->evento == "wsConversa") {
 		if ($data->action == "refreshOn" || $data->action == "refreshOnComplementar" || $data->action == "refreshOff") {
